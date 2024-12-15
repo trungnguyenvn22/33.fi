@@ -17,6 +17,9 @@ spring:
      hibernate:
        dialect: org.hibernate.dialect.MySQL8Dialect
        format_sql: true
+       transaction:
+         auto_close_session: true
+   open-in-view: true
 logging:
   level:
     org:
