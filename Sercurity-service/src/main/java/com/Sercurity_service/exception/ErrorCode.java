@@ -13,6 +13,8 @@ public enum ErrorCode {
     UNCAUGHT_EXCEPTION(9999, "Uncaught Exception"),
     USERNAME_INVALID(1003, "Username must be at least 6 characters"),
     PASSWORD_INVALID(1004, "Password must be at least 8 characters"),
+    USER_NOT_EXISTS(1005, "User Not Exists"),
+    UNAUTHENTICATED(1006, "Unauthenticated"),
     ;
 
     int code;

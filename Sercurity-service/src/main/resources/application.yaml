@@ -30,3 +30,5 @@ logging:
 
 
 
+jwt:
+  signerKey: "ECmibn88gQej50jA9obcaWmzJc3+hgkY2xu57HYwN/0ggQ7zcpO3vUmk/8yAg2Sv"
