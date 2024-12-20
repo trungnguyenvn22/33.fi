@@ -1,7 +1,9 @@
 package com.Sercurity_service.service;
 
 import com.Sercurity_service.dto.request.UserCreationRequest;
+import com.Sercurity_service.dto.response.UserResponse;
 import com.Sercurity_service.entity.Users;
+import com.Sercurity_service.enums.Role;
 import com.Sercurity_service.exception.AppException;
 import com.Sercurity_service.exception.ErrorCode;
 import com.Sercurity_service.mapper.UserMapper;
@@ -12,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -31,12 +34,23 @@ public class UserService {
         Users user = userMapper.toUser(request);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        HashSet<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
+        user.setRoles(roles);
         return userRepository.save(user);
+
     }
 
     public Users getUserById(String userID){
 
         return userRepository.findById(userID).orElseThrow(() -> new RuntimeException("User not found"));
+
+    }
+
+    public List<UserResponse> getUsers(){
+        List<Users> list = userRepository.findAll();
+
+        return userMapper.toResponses(list);
 
     }
 }

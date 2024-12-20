@@ -1,11 +1,12 @@
 package com.Sercurity_service.mapper;
 
 import com.Sercurity_service.dto.request.UserCreationRequest;
+import com.Sercurity_service.dto.response.UserResponse;
 import com.Sercurity_service.entity.Users;
-import jakarta.validation.constraints.Size;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -17,4 +18,15 @@ public interface UserMapper {
     @Mapping(source = "request.phone", target = "phone")
     @Mapping(source = "request.address", target = "address")
     Users toUser(UserCreationRequest request);
+
+    @Mapping(source = "users.id", target = "id")
+    @Mapping(source = "users.username", target = "username")
+    @Mapping(source = "users.email", target = "email")
+    @Mapping(source = "users.fullName", target = "fullName")
+    @Mapping(source = "users.phone", target = "phone")
+    @Mapping(source = "users.address", target = "address")
+    UserResponse userToResponse(Users users);
+
+    List<UserResponse> toResponses(List<Users> users);
+
 }

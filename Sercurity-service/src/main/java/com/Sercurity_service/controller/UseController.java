@@ -2,10 +2,13 @@ package com.Sercurity_service.controller;
 
 import com.Sercurity_service.dto.request.ApiResponse;
 import com.Sercurity_service.dto.request.UserCreationRequest;
+import com.Sercurity_service.dto.response.UserResponse;
 import com.Sercurity_service.entity.Users;
 import com.Sercurity_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -26,6 +29,14 @@ public class UseController {
     Users getUserById(@PathVariable String id) {
         return userService.getUserById(id);
     };
+
+    @GetMapping("/get-users")
+    ApiResponse<List<UserResponse>> getUsers(){
+        ApiResponse<List<UserResponse>> response = new ApiResponse<>();
+        response.setResult(userService.getUsers());
+        return response;
+
+    }
 
 }
 

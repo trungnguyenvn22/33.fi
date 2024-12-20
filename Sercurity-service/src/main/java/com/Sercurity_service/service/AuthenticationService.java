@@ -4,6 +4,8 @@ import com.Sercurity_service.dto.request.AuthenticationRequest;
 import com.Sercurity_service.dto.request.IntrospectRequest;
 import com.Sercurity_service.dto.response.AuthenticationResponse;
 import com.Sercurity_service.dto.response.IntrospectResponse;
+import com.Sercurity_service.entity.Users;
+import com.Sercurity_service.enums.Role;
 import com.Sercurity_service.exception.AppException;
 import com.Sercurity_service.exception.ErrorCode;
 import com.Sercurity_service.repository.UserRepository;
@@ -29,6 +31,8 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Set;
+import java.util.StringJoiner;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -50,7 +54,7 @@ public class AuthenticationService {
         if(!authenticated)
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
-        var token = generateToken(request.getUsername());
+        var token = generateToken(user);
         response.setToken(token);
         response.setAuthenticated(authenticated);
         return response;
@@ -58,17 +62,18 @@ public class AuthenticationService {
     };
 
     // Tạo token
-    private String generateToken(String username){
+    private String generateToken(Users users){
         //tạo header
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
         // (data trong body gọi là claim)
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(username)
+                .subject(users.getUsername())
                 .issuer("oxChun21.fi")
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(29, ChronoUnit.DAYS).toEpochMilli()
                 ))
+                .claim("scope",buildScope(users))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -98,4 +103,14 @@ public class AuthenticationService {
         response.setToken_valid(verified && exp.after(new Date()));
         return response;
     };
+
+    private String buildScope(Users users){
+        StringJoiner stringJoiner = new StringJoiner(" ");
+        if(!users.getRoles().isEmpty()){
+            for (String role : users.getRoles()){
+                stringJoiner.add(role);
+            }
+        }
+        return stringJoiner.toString();
+    }
 }

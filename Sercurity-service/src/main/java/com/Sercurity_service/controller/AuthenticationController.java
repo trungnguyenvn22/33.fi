@@ -32,9 +32,9 @@ public class AuthenticationController {
 
     @PostMapping("/introspect")
     ApiResponse<IntrospectResponse> introspect(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
-        IntrospectResponse ressult = authenticationService.introspect(request);
+        IntrospectResponse result = authenticationService.introspect(request);
         ApiResponse<IntrospectResponse> apiIntrospect = new ApiResponse<>();
-        apiIntrospect.setResult(ressult);
+        apiIntrospect.setResult(result);
         return apiIntrospect;
     }
 
