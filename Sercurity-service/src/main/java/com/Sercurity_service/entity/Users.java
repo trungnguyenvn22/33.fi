@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
 
 
 @Data
@@ -26,6 +27,8 @@ public class Users {
      String fullName;
      String phone;
      String address;
+     @ElementCollection
+     Set<String> roles;
 
 
 
