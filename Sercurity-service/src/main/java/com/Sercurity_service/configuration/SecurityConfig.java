@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -31,6 +33,8 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {
             "/users", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh", "auth/login"
     };
+    private final String [] PRIVATE_ENDPOINTS_USER = {"/get-users"};
+    private final String [] PRIVATE_ENDPOINTS_ADMIN = {};
 
     @Value("${jwt.signerKey}")
     private String signerKey;
@@ -38,12 +42,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             http.authorizeHttpRequests(request ->
                     request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                            .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS).permitAll()
                             .anyRequest().authenticated());
 
             http.oauth2ResourceServer(oauth2 ->
                     oauth2.jwt(jwtConfigurer ->
                             jwtConfigurer.decoder(jwtDecoder())
-                            )
+                                    .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                            .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                     );
 
             http.csrf(AbstractHttpConfigurer::disable);
@@ -61,6 +67,16 @@ public class SecurityConfig {
                 .build();
 
     };
+
+    @Bean
+    JwtAuthenticationConverter jwtAuthenticationConverter(){
+        JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+        converter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
+
+        return converter;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

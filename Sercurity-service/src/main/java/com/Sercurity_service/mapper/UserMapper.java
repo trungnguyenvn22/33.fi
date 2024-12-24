@@ -25,6 +25,7 @@ public interface UserMapper {
     @Mapping(source = "users.fullName", target = "fullName")
     @Mapping(source = "users.phone", target = "phone")
     @Mapping(source = "users.address", target = "address")
+    @Mapping(source = "users.roles", target = "roles")
     UserResponse userToResponse(Users users);
 
     List<UserResponse> toResponses(List<Users> users);

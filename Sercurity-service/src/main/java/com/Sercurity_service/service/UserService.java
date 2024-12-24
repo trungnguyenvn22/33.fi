@@ -10,6 +10,7 @@ import com.Sercurity_service.mapper.UserMapper;
 import com.Sercurity_service.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,6 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Transactional
     public Users createUser(UserCreationRequest request){
 
         if(userRepository.existsByUsername(request.getUsername()))
@@ -52,5 +52,16 @@ public class UserService {
 
         return userMapper.toResponses(list);
 
+    }
+
+    public UserResponse getMyInfo(){
+        UserResponse userResponse = new UserResponse();
+        var authenticate = SecurityContextHolder.getContext().getAuthentication();
+        String username = authenticate.getName();
+        userResponse = userMapper.userToResponse(userRepository.findByUsername(username).orElseThrow(
+                () -> new AppException(ErrorCode.USER_NOT_EXISTS)
+        ));
+
+        return userResponse;
     }
 }
