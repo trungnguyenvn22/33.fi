@@ -1,5 +1,6 @@
 package com.Sercurity_service.dto.response;
 
+import com.Sercurity_service.entity.Role;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,5 +22,5 @@ public class UserResponse {
     String fullName;
     String phone;
     String address;
-    Set<String> roles;
+    Set<Role> roles;
 }

@@ -25,7 +25,7 @@ public class ApplicationInitConfig {
                 Users users = new Users();
                 users.setUsername("admin");
                 users.setPassword(passwordEncoder.encode("admin"));
-                users.setRoles(roles);
+              //  users.setRoles(roles);
                 userRepository.save(users);
                 log.warn("admin user has been created with default username and password");
             }

@@ -27,8 +27,9 @@ public class Users {
      String fullName;
      String phone;
      String address;
-     @ElementCollection
-     Set<String> roles;
+
+     @ManyToMany
+     Set<Role> roles;
 
 
 
