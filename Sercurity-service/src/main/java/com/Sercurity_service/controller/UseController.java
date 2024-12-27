@@ -2,8 +2,10 @@ package com.Sercurity_service.controller;
 
 import com.Sercurity_service.dto.request.ApiResponse;
 import com.Sercurity_service.dto.request.UserCreationRequest;
+import com.Sercurity_service.dto.request.UserUpdateRequest;
 import com.Sercurity_service.dto.response.UserResponse;
 import com.Sercurity_service.entity.Users;
+import com.Sercurity_service.repository.UserRepository;
 import com.Sercurity_service.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,8 @@ public class UseController {
     private static final Logger log = LoggerFactory.getLogger(UseController.class);
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/users")
     ApiResponse<Users> createUser(@RequestBody UserCreationRequest request) {
@@ -58,6 +62,12 @@ public class UseController {
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setResult(userService.getMyInfo());
         return response;
+    }
+
+    @PostMapping("/update")
+    ApiResponse<UserResponse> updateUser(UserUpdateRequest request){
+        ApiResponse<UserResponse> response = new ApiResponse<>();
+        response.setResult(userService.updateUser(request));
     }
 
 

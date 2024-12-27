@@ -3,6 +3,8 @@ package com.Sercurity_service.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,4 +18,5 @@ public class UserCreationRequest {
     String fullName;
     String phone;
     String address;
+    List<String> roles;
 }

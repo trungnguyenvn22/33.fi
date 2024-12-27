@@ -19,6 +19,8 @@ public enum ErrorCode {
     UNAUTHENTICATED(1006, "Unauthenticated",HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission",HttpStatus.FORBIDDEN),
     PERMISSION_ALREADY_EXISTS(410, "Permission already exists", HttpStatus.BAD_REQUEST),
+    ROLE_ALREADY_EXISTS(411, "Role already exists", HttpStatus.BAD_REQUEST),
+    ROLE_NOT_FOUND(412, "Role not found", HttpStatus.NOT_FOUND)
 
     ;
 

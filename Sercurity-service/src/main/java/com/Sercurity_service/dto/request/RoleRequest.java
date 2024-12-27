@@ -1,23 +1,21 @@
 package com.Sercurity_service.dto.request;
 
-
-import com.Sercurity_service.entity.Role;
+import com.Sercurity_service.entity.Permission;
+import jakarta.persistence.ManyToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
+import java.util.Set;
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdateRequest {
-    String username;
-    String email;
-    String fullName;
-    String phone;
-    String address;
-    List<Role> roles;
+public class RoleRequest {
+    String role;
+    String description;
+    Set<String> permissions;
 }

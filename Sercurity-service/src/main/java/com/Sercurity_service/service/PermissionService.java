@@ -8,6 +8,8 @@ import com.Sercurity_service.exception.ErrorCode;
 import com.Sercurity_service.mapper.PermissionMapper;
 import com.Sercurity_service.repository.PermissionRepository;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,11 @@ import java.util.List;
 public class PermissionService {
     @Autowired
     PermissionRepository permissionRepository;
+
+    @Autowired
     PermissionMapper permissionMapper;
 
-    PermissionResponse createPermission(PermissionRequest request) {
+    public PermissionResponse createPermission(PermissionRequest request) {
         Permission permission = new Permission();
         if(permissionRepository.existsByPermission(request.getPermission()))
             throw new AppException(ErrorCode.PERMISSION_ALREADY_EXISTS);
@@ -35,7 +39,7 @@ public class PermissionService {
         return permissionMapper.permissionToResponse(permission);
     }
 
-    List<PermissionResponse> getAllPermission(){
+    public List<PermissionResponse> getAllPermission(){
         List<Permission> list = permissionRepository.findAll();
 
         return permissionMapper.toListPermissionResponses(list);
