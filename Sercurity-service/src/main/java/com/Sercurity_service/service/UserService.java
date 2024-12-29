@@ -8,11 +8,14 @@ import com.Sercurity_service.entity.Users;
 import com.Sercurity_service.exception.AppException;
 import com.Sercurity_service.exception.ErrorCode;
 import com.Sercurity_service.mapper.UserMapper;
+import com.Sercurity_service.mapper.UserUpdateMapper;
 import com.Sercurity_service.repository.RoleRepository;
 import com.Sercurity_service.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,8 +27,10 @@ import java.util.List;
 import java.util.Set;
 
 @Service
+@Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserService {
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -35,6 +40,8 @@ public class UserService {
     UserMapper userMapper;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    UserUpdateMapper userUpdateMapper;
 
     final String user_role = "USER";
 
@@ -78,15 +85,24 @@ public class UserService {
         return userResponse;
     }
 
+    String username;
+    String email;
+    String fullName;
+    String phone;
+    String address;
     public UserResponse updateUser(UserUpdateRequest request){
-        if(!userRepository.existsByUsername(request.getUsername()))
-            throw new AppException(ErrorCode.USER_NOT_FOUND);
 
-        var user = userRepository.findByUsername(request.getUsername()).orElseThrow(
+        log.info("user id: " + request.getId());
+        Users user = userRepository.findById(request.getId()).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_FOUND)
         );
-        user = userMapper.userUpdateToUsers(request);
         List<Role> roles = roleRepository.findAllByRoleIn(request.getRoles());
+        log.info("user info: " + user.toString());
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setFullName(request.getFullName());
+        user.setPhone(request.getPhone());
+        user.setAddress(request.getAddress());
         user.setRoles(new HashSet<>(roles));
         userRepository.save(user);
         return userMapper.userToResponse(user);

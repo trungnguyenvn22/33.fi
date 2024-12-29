@@ -10,11 +10,13 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {
+    @Mapping(source = "request.id", target = "id")
     @Mapping(source = "request.role", target = "role")
     @Mapping(source = "request.description", target = "description")
     @Mapping(target = "permissions", ignore = true)
     Role requestToRole(RoleRequest request);
 
+    @Mapping(source = "role.id", target = "id")
     @Mapping(source = "role.role", target = "role")
     @Mapping(source = "role.description", target = "description")
     @Mapping(source = "role.permissions", target = "permissions")

@@ -14,10 +14,11 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
+    String id;
     String username;
     String email;
     String fullName;
     String phone;
     String address;
-    List<Role> roles;
+    List<String> roles;
 }

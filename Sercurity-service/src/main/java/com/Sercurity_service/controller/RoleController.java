@@ -36,4 +36,11 @@ public class RoleController {
         response.setResult(roleService.getAll());
         return response;
     }
+
+    @PostMapping("/update-role")
+    ApiResponse<RoleResponse> updateRole(@RequestBody RoleRequest roleRequest) {
+        ApiResponse<RoleResponse> response = new ApiResponse<>();
+        response.setResult(roleService.updateRole(roleRequest));
+        return response;
+    }
 }

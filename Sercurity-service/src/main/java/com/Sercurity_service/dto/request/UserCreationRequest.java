@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 public class UserCreationRequest {
 
+    String id;
     String username;
     String password;
     String email;

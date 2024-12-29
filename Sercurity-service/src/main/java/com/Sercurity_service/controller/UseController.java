@@ -56,7 +56,7 @@ public class UseController {
     }
 
 //    @PreAuthorize("hasRole('ADMIN')")
-    @PostAuthorize("hasRole('ADMIN')")
+//    @PostAuthorize("hasRole('ADMIN')")
     @GetMapping("/my-info")
     ApiResponse<UserResponse> getMyInfo(){
         ApiResponse<UserResponse> response = new ApiResponse<>();
@@ -65,9 +65,10 @@ public class UseController {
     }
 
     @PostMapping("/update")
-    ApiResponse<UserResponse> updateUser(UserUpdateRequest request){
+    ApiResponse<UserResponse> updateUser(@RequestBody UserUpdateRequest request){
         ApiResponse<UserResponse> response = new ApiResponse<>();
         response.setResult(userService.updateUser(request));
+        return response;
     }
 
 

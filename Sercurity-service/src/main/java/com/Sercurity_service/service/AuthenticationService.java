@@ -4,8 +4,8 @@ import com.Sercurity_service.dto.request.AuthenticationRequest;
 import com.Sercurity_service.dto.request.IntrospectRequest;
 import com.Sercurity_service.dto.response.AuthenticationResponse;
 import com.Sercurity_service.dto.response.IntrospectResponse;
+import com.Sercurity_service.entity.Role;
 import com.Sercurity_service.entity.Users;
-import com.Sercurity_service.enums.Role;
 import com.Sercurity_service.exception.AppException;
 import com.Sercurity_service.exception.ErrorCode;
 import com.Sercurity_service.repository.UserRepository;
@@ -107,9 +107,9 @@ public class AuthenticationService {
     private String buildScope(Users users){
         StringJoiner stringJoiner = new StringJoiner(" ");
         if(!users.getRoles().isEmpty()){
-//            for (String role : users.getRoles()){
-//                stringJoiner.add(role);
-//            }
+            for (Role role: users.getRoles()){
+                stringJoiner.add(role.getRole());
+            }
         }
         return stringJoiner.toString();
     }

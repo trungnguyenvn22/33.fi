@@ -11,6 +11,7 @@ import com.Sercurity_service.exception.ErrorCode;
 import com.Sercurity_service.mapper.RoleMapper;
 import com.Sercurity_service.repository.PermissionRepository;
 import com.Sercurity_service.repository.RoleRepository;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,11 +23,14 @@ import java.util.HashSet;
 import java.util.List;
 
 @Service
+@Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class RoleService {
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    PermissionService permissionService;
     @Autowired
     RoleMapper roleMapper;
     @Autowired
@@ -46,5 +50,19 @@ public class RoleService {
     public List<RoleResponse> getAll(){
         List< Role> list = roleRepository.findAll();
         return roleMapper.toListRoleResponse(list);
+    }
+
+    public RoleResponse updateRole(RoleRequest roleRequest) {
+        var role = roleRepository.findById(roleRequest.getId()).orElseThrow(
+                () -> new AppException(ErrorCode.ROLE_NOT_FOUND)
+        );
+        if (roleRequest.getPermissions() == null)
+            role.setPermissions(null);
+        List<Permission> permissions = permissionRepository.getPermissionByRolePermission(roleRequest.getPermissions());
+        role.setPermissions(new HashSet<>(permissions));
+        role.setRole(roleRequest.getRole());
+        role.setDescription(roleRequest.getDescription());
+        roleRepository.save(role);
+        return roleMapper.toRoleResponse(role);
     }
 }

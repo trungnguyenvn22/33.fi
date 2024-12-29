@@ -15,6 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RoleRequest {
+    int id;
     String role;
     String description;
     Set<String> permissions;
