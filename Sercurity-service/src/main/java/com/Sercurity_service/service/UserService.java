@@ -85,11 +85,7 @@ public class UserService {
         return userResponse;
     }
 
-    String username;
-    String email;
-    String fullName;
-    String phone;
-    String address;
+
     public UserResponse updateUser(UserUpdateRequest request){
 
         log.info("user id: " + request.getId());

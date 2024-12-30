@@ -31,7 +31,7 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {
-            "/users", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh", "auth/login"
+            "/users", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh", "auth/login", "/otp/generate"
     };
     private final String [] PRIVATE_ENDPOINTS_USER = {"/get-users"};
     private final String [] PRIVATE_ENDPOINTS_ADMIN = {};

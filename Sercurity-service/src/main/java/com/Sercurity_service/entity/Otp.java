@@ -1,6 +1,8 @@
 package com.Sercurity_service.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Otp {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     String otpValue;
     String email;
