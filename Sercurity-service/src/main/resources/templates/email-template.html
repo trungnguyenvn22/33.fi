@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #52B44B;
+            padding: 20px;
+            text-align: center;
+        }
+        .header img {
+            height: 40px;
+        }
+        .content {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .otp-code {
+            font-size: 32px;
+            text-align: center;
+            color: #52B44B;
+            margin: 30px 0;
+        }
+        .note {
+            font-style: italic;
+            color: #666;
+            font-size: 14px;
+        }
+        .footer {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            margin-top: 40px;
+        }
+        .footer a {
+            color: #52B44B;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <img th:src="|cid:${imageResourceName}|" alt="33.fi Logo">
+</div>
+<div class="content">
+    <h2 style="color: #52B44B; text-align: center;">XÁC NHẬN THAY ĐỔI MẬT KHẨU</h2>
+
+    <p th:text="${userName} + ' thân mến,'"></p>
+
+    <p><a href="https://www.instagram.com/tuiminhday11/">33.fi</a> nhận được yêu cầu thay đổi mật khẩu của bạn. Xin vui lòng sử dụng mã OTP dưới đây:</p>
+
+    <div class="otp-code" th:text="${otpCode}"></div>
+
+    <p class="note">*Lưu ý: Vui lòng không chia sẻ mã OTP này cho người khác, email xác thực sẽ tự động hết hiệu lực sau 5 phút kể từ thời điểm mail được gửi đi.</p>
+
+    <div class="footer">
+        Đây là email tự động. Xin bạn vui lòng không gửi phản hồi vào hộp thư này.
+    </div>
+</div>
+</body>
+</html>

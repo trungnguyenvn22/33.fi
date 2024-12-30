@@ -8,20 +8,33 @@ import com.Sercurity_service.exception.AppException;
 import com.Sercurity_service.exception.ErrorCode;
 import com.Sercurity_service.repository.OtpRepository;
 import com.Sercurity_service.repository.UserRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 @Service
+@Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 public class OtpService {
@@ -30,7 +43,9 @@ public class OtpService {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    MailSender mailSender;
+    JavaMailSender mailSender;
+    @Autowired
+    private TemplateEngine templateEngine;
 
     String otpValue;
     String email;
@@ -49,7 +64,12 @@ public class OtpService {
         otp.setExpTime(expiredTime);
         otp.setUsed(false);
         otpRepository.save(otp);
-        sendOtpToMail(otpValue, email);
+       // sendOtpToMail(otpValue, email);
+        Map<String, Object> templateModel = new HashMap<>();
+        templateModel.put("userName", user.getFullName());
+        templateModel.put("imageResourceName", "logo");
+        templateModel.put("otpCode", otpValue);
+        sendOtpWithTemplate(email, templateModel);
         return new OtpResponse("OTP send successfully", true);
     }
 
@@ -81,4 +101,30 @@ public class OtpService {
         mailSender.send(message);
 
     }
+
+    void sendOtpWithTemplate( String email, Map<String,Object> templateModel){
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            Context thymeleafContext = new Context();
+            thymeleafContext.setVariables(templateModel);
+
+            String htmlBody = templateEngine.process("email-template", thymeleafContext);
+
+            helper.setTo(email);
+            helper.setSubject("YÊU CẦU THAY ĐỔI MẬT KHẨU");
+            helper.setText(htmlBody, true);
+
+            // Thêm hình ảnh
+            ClassPathResource imageResource = new ClassPathResource("static/image/logo.png");
+            helper.addInline("imageResourceName", imageResource);
+
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            throw new RuntimeException("Error sending email", e);
+        }
+    }
+
+
 }
