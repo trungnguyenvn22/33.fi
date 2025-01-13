@@ -66,8 +66,9 @@ public class OtpService {
         otpRepository.save(otp);
        // sendOtpToMail(otpValue, email);
         Map<String, Object> templateModel = new HashMap<>();
+        ClassPathResource imageResource = new ClassPathResource("static/image/logo1.png");
         templateModel.put("userName", user.getFullName());
-        templateModel.put("imageResourceName", "logo");
+        templateModel.put("imageResourceName", imageResource);
         templateModel.put("otpCode", otpValue);
         sendOtpWithTemplate(email, templateModel);
         return new OtpResponse("OTP send successfully", true);
@@ -116,9 +117,8 @@ public class OtpService {
             helper.setSubject("YÊU CẦU THAY ĐỔI MẬT KHẨU");
             helper.setText(htmlBody, true);
 
-            // Thêm hình ảnh
-            ClassPathResource imageResource = new ClassPathResource("static/image/logo.png");
-            helper.addInline("imageResourceName", imageResource);
+//            ClassPathResource imageResource = new ClassPathResource("static/image/logo1p.png");
+//            helper.addInline("imageResourceName", imageResource);
 
             mailSender.send(message);
         } catch (MessagingException e) {

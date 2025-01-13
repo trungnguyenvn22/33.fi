@@ -1,5 +1,6 @@
 package com.Sercurity_service.entity;
 
+import com.Sercurity_service.validate.PasswordConstraint;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -22,7 +23,8 @@ public class Users {
      String id;
      @Size(min = 6, message = "USERNAME_INVALID")
      String username;
-     @Size(min = 8,message = "")
+
+     @PasswordConstraint()
      String password;
      String email;
      String fullName;

@@ -40,7 +40,7 @@ public class UseController {
         return userService.getUserById(id);
     };
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/get-users")
     ApiResponse<List<UserResponse>> getUsers(){
         log.info("in method get user");
@@ -55,8 +55,7 @@ public class UseController {
 
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
-//    @PostAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/my-info")
     ApiResponse<UserResponse> getMyInfo(){
         ApiResponse<UserResponse> response = new ApiResponse<>();

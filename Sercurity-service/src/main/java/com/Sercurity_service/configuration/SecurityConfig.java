@@ -2,6 +2,7 @@ package com.Sercurity_service.configuration;
 
 import com.Sercurity_service.entity.Users;
 import org.apache.catalina.filters.CorsFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,13 +32,15 @@ import javax.crypto.spec.SecretKeySpec;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS = {
-            "/users", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh", "auth/login", "/otp/generate"
+            "/users", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh", "/auth/login", "/otp/generate"
     };
     private final String [] PRIVATE_ENDPOINTS_USER = {"/get-users"};
     private final String [] PRIVATE_ENDPOINTS_ADMIN = {};
 
     @Value("${jwt.signerKey}")
     private String signerKey;
+    @Autowired
+    private CustomJwtDecoder customJwtDecoder;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
             http.authorizeHttpRequests(request ->
@@ -47,7 +50,7 @@ public class SecurityConfig {
 
             http.oauth2ResourceServer(oauth2 ->
                     oauth2.jwt(jwtConfigurer ->
-                            jwtConfigurer.decoder(jwtDecoder())
+                            jwtConfigurer.decoder(customJwtDecoder)
                                     .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                             .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
                     );

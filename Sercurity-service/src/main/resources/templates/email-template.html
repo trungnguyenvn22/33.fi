@@ -9,12 +9,13 @@
             padding: 0;
         }
         .header {
-            background-color: #52B44B;
-            padding: 20px;
+            padding: 5px;
             text-align: center;
         }
         .header img {
-            height: 40px;
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
         }
         .content {
             padding: 20px;
@@ -46,16 +47,18 @@
 </head>
 <body>
 <div class="header">
-    <img th:src="|cid:${imageResourceName}|" alt="33.fi Logo">
+    <img src="https://i.imgur.com/GBZX5O1.png" alt="33.fi Logo">
 </div>
 <div class="content">
     <h2 style="color: #52B44B; text-align: center;">XÁC NHẬN THAY ĐỔI MẬT KHẨU</h2>
 
-    <p th:text="${userName} + ' thân mến,'"></p>
+<!--    <p th:text="${userName} + ' thân mến,'"></p>-->
+    <p th:utext="'<strong>' + ${userName} + '</strong> thân mến,'"></p>
 
-    <p><a href="https://www.instagram.com/tuiminhday11/">33.fi</a> nhận được yêu cầu thay đổi mật khẩu của bạn. Xin vui lòng sử dụng mã OTP dưới đây:</p>
+    <p><strong><a style="text-decoration: none" href="https://www.instagram.com/tuiminhday11/">Fairy clothing</a></strong> thông báo </p>
+    <p>Chúng tôi đã nhận được yêu cầu thay đổi mật khẩu của bạn. Xin vui lòng sử dụng mã OTP dưới đây:</p>
 
-    <div class="otp-code" th:text="${otpCode}"></div>
+    <div class="otp-code" th:utext="'<strong>'+ ${otpCode}+ '</strong>'"></div>
 
     <p class="note">*Lưu ý: Vui lòng không chia sẻ mã OTP này cho người khác, email xác thực sẽ tự động hết hiệu lực sau 5 phút kể từ thời điểm mail được gửi đi.</p>
 
